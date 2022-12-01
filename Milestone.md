@@ -85,3 +85,8 @@ Generation Step:<br />
   
 The full implementation and testing code can be found at https://github.com/anesum99/stanford_compression_library/blob/main/rANS_alias/vose_alias_sampler.py
 
+
+
+# Next Steps
+I will incoporate the sampler in the encoder to pre-compute the alias tables and use these to lookup 
+symbols in the decoder
