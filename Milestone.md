@@ -55,15 +55,17 @@ Initialization Step:<br />
       -If prob[o]<1<br />
         -add u to under_sample.<br />
       -else:<br />
-        -add g to oversample.<br />
+        -add u to oversample.<br />
   -While under_sample is not empty:<br />
-      -Remove the first element,u from under_sample and set prob[u] to 1<br />
+      -Remove the first element, u, from under_sample and set prob[u] to 1<br />
   -While over_sample is not empty: <br />
-      -Remove the first element,o from over_sample and set prob[o] to 1<br />
+      -Remove the first element, o, from over_sample and set prob[o] to 1<br />
  
 Generation Step:<br />
   -Generate a fair die roll i from an n-sided die; <br />
   -Flip a biased coin that comes up heads with probability prob[i].<br />
   -If the coin comes up "heads," return i.<br />
   -Else, return alias[i].<br />
+  
+The full implementation and testing code can be found at https://github.com/anesum99/stanford_compression_library/blob/main/rANS_alias/vose_alias_sampler.py
 
