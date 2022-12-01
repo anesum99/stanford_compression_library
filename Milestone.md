@@ -13,13 +13,16 @@ constant time per symbol using the Alias method and subsequently speed up the de
 1. rANS with static probability distributions
  https://fgiesen.wordpress.com/2014/02/18/rans-with-static-probability-distributions/
  
- 
+ This paper gives an overview of rANS and its limitations. It then proposes the use of<br/>
+ tables for faster decoding.
  
  
 2. Understanding ANS - 10 - Optimal normalized counts 
  http://cbloomrants.blogspot.com/2014/02/02-11-14-understanding-ans-10.html
  
- 
+ This paper provides insights on efficiently creating more accurate scaled probabilities<br/>
+ required for rANS and other aritmatic coders in general to allow for lossless compression and <br/>
+ decompression. 
  
  
 3. Lab Notes: The Alias Method for Sampling from Discrete Distributions 
@@ -29,6 +32,9 @@ constant time per symbol using the Alias method and subsequently speed up the de
 
 4. Darts, Dice, and Coins: Sampling from a Discrete Distribution
    https://www.keithschwarz.com/darts-dice-coins/
+   
+   This paper gives a thorough guide to several implementations of the alias sampling algorithm, including
+   the optimal one implemented for this project.
 
 
 ## Alias Method for Sampling
