@@ -3,10 +3,11 @@
 
 ## Project Statement
 
-Often, data is compressed once while the decoding is later done several times, probably by several users. 
-In such cases, it is desirable that the decoding operation be as fast as possible. 
-The current SCL implementation of rANS is slowed down by the binary search for the symbol from the cumulative frequency table. 
-This project aims to reduce this compute complexity from Olog(M) to constant time per symbol using the Alias method and subsequently speed up the decoding process. 
+Often, data is compressed once while the decoding is later done several times, probably by several<br/> 
+users. In such cases, it is desirable that the decoding operation be as fast as possible.<br/> 
+The current SCL implementation of rANS is slowed down by the binary search for the symbol from the <br/>
+cumulative frequency table. This project aims to reduce this compute complexity from Olog(M) to <br/>
+constant time per symbol using the Alias method and subsequently speed up the decoding process. <br/> 
 
 ## Literature Review
 1. rANS with static probability distributions
@@ -31,7 +32,16 @@ This project aims to reduce this compute complexity from Olog(M) to constant tim
 
 
 ## Alias Method for Sampling
+The alias method allows constant time sampling from a static distribution.<br /> 
+Since we are mainly concerned with decoding speed, we can relax our speed <br/>
+requirements in the decoding stage, an alias table <br />
+can be generated once at the encoder and be passed on together with the scaled <br />
+scaled probability table, to the decoder. The tables are generated at O(n) where<br /> 
+n is the length of the distribution. This then allows constant time decoding per <br/>
+symbol and overal linear time for the entire decoding.<br />
 
+As a result, the encoder simply needs to be modified to incoporate the table generation<br/>
+while the decoder needs to accept the tables as input. 
 
 
 
