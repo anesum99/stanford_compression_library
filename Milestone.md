@@ -10,14 +10,14 @@ cumulative frequency table. This project aims to reduce this compute complexity 
 constant time per symbol using the Alias method and subsequently speed up the decoding process. <br/> 
 
 ## Literature Review
-1. rANS with static probability distributions
+1. rANS with static probability distributions<br/>
  https://fgiesen.wordpress.com/2014/02/18/rans-with-static-probability-distributions/
  
  This paper gives an overview of rANS and its limitations. It then proposes the use of<br/>
  tables for faster decoding.
  
  
-2. Understanding ANS - 10 - Optimal normalized counts 
+2. Understanding ANS - 10 - Optimal normalized counts <br/>
  http://cbloomrants.blogspot.com/2014/02/02-11-14-understanding-ans-10.html
  
  This paper provides insights on efficiently creating more accurate scaled probabilities<br/>
@@ -25,12 +25,12 @@ constant time per symbol using the Alias method and subsequently speed up the de
  decompression. 
  
  
-3. Lab Notes: The Alias Method for Sampling from Discrete Distributions 
+3. Lab Notes: The Alias Method for Sampling from Discrete Distributions <br/>
    http://pandasthumb.org/archives/2012/08/lab-notes-the-a.html
 
 
 
-4. Darts, Dice, and Coins: Sampling from a Discrete Distribution
+4. Darts, Dice, and Coins: Sampling from a Discrete Distribution<br/>
    https://www.keithschwarz.com/darts-dice-coins/
    
    This paper gives a thorough guide to several implementations of the alias sampling algorithm, including
