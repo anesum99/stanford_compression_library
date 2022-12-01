@@ -1,13 +1,14 @@
 #!/usr/bin/python
 import random
 class VoseAliasSampler(object):
-    """Implementation of Vose-Alias Sampler bases on http://www.keithschwarz.com/darts-dice-coins/)"""
+    """Implementation of Vose-Alias Sampler based on http://www.keithschwarz.com/darts-dice-coins/)"""
 
     def __init__(self, dist):
         """ (VoseAlias, dict) -> NoneType """
         self.dist = dist
+        self.symbols = list(dist)
         self.initialize()
-        self.symbols = list(self.prob_table)
+        
         
         
     #Initialization Step
@@ -65,7 +66,13 @@ class VoseAliasSampler(object):
 
 
 def main():
-    
+    #sample test for sampler
+    alphabet = dict(a=0.15,b=0.1,c=0.1,d=0.1,e=0.2,f=0.1,g=0.05,h=0.05,i=0.15)
+    sampler = VoseAliasSampler(alphabet)
+    samples = {s:0 for s in alphabet}
+    for _sample in sampler.sample(1000):
+        samples[_sample] += 1
+    assert(samples == dict(a=150,b=100,c=100,d=100,e=200,f=100,g=50,h=50,i=150) )
     
 
 
