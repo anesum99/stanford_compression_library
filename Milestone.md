@@ -39,8 +39,8 @@ This project aims to reduce this compute complexity from Olog(M) to constant tim
 ### Sampler Pseudo-code
 
 Initialization Step:
-  -Create arrays alias and and scaled prob tables of size n each.
-  -Create two bucket lists, under_sample and over_sample.
+-Create arrays alias and and scaled prob tables of size n each.
+-Create two bucket lists, under_sample and over_sample.
   -Multiply each probability by n to get the scaled probability.
   -For each scaled probability pi:
       -If pi<1,
