@@ -122,7 +122,7 @@ class VoseAliasSampler(object):
         self.dist = dist
         self.symbols = list(dist)
         self.initialize()
-        
+        self.num_bits = math.ceil(math.log2(len(self.symbols)))
         
         
     #Initialization Step
@@ -133,7 +133,6 @@ class VoseAliasSampler(object):
         self.alias_table = {}  # alias table
         under_sample = [] # stack for scaled probabilities smaller than 1(probability under the average)
         over_sample = [] # stacks for scaled probabilities greater or equal to 1(probability above the average)
-
         # generate scaled probabilities and place into appropriate stacks
         for symbol, prob in self.dist.items():
             self.prob_table[symbol] = prob*n
@@ -185,17 +184,21 @@ class rANSEncoder(DataEncoder):
             rans_params (rANSParams): global rANS hyperparameters
         """
         self.params = rans_params
-
+        self.prob_dist = self.params.freq.get_prob_dist()
+        self.alias_sampler = VoseAliasSampler(self.prob_dist)
+        self.num_bits = alias_sampler.num_bits
+        self.max_val = (1<<self.num_bits) - 1
     def rans_base_encode_step(self, s, state: int):
         """base rANS encode step
 
         updates the state based on the input symbols s, and returns the updated state
         """
         f = self.params.freqs.frequency(s)
-        block_id = state // f
-        slot = self.params.freqs.cumulative_freq_dict[s] + (state % f)
-        next_state = block_id * self.params.M + slot
-        return next_state
+#         block_id = state // f
+#         slot = self.params.freqs.cumulative_freq_dict[s] + (state % f)
+#         next_state = block_id * self.params.M + slot
+#         return next_state
+        
 
     def shrink_state(self, state: int, next_symbol) -> Tuple[int, BitArray]:
         """stream out the lower bits of the state, until the state is below params.max_shrunk_state[next_symbol]"""
