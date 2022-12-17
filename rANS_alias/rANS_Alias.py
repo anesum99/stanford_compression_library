@@ -250,7 +250,7 @@ class rANSEncoder(DataEncoder):
         # NOTE: we are prepending bits for pedagogy. In practice, it might be faster to assign a larger memory chunk and then fill it from the back
         # see: https://github.com/rygorous/ryg_rans/blob/c9d162d996fd600315af9ae8eb89d832576cb32d/main.cpp#L176 for example
         symbol_bitarray = out_bits + symbol_bitarray
-        symbol_ind = self.find_bin(cum_prob_list, slot)
+        
         # core encoding step
         state = self.rans_base_encode_step(s, state)
         return state, symbol_bitarray
