@@ -119,7 +119,7 @@ class VoseAliasSampler(object):
 
     def __init__(self, dist):
         """ (VoseAlias, dict) -> NoneType """
-        self.dist = dist
+        self.dist = dist.prob_dict
         self.symbols = list(dist)
         self.initialize()
         self.num_bits = math.ceil(math.log2(len(self.symbols)))
