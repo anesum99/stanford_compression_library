@@ -187,17 +187,35 @@ class rANSEncoder(DataEncoder):
         self.prob_dist = self.params.freq.get_prob_dist()
         self.alias_sampler = VoseAliasSampler(self.prob_dist)
         self.num_bits = alias_sampler.num_bits
-        self.max_val = (1<<self.num_bits) - 1
+        self.lookup_table = {}
+    @staticmethod
+    def find_bin(cumulative_freqs_list: List, slot: int) -> int:
+        """Performs binary search over cumulative_freqs_list to locate which bin
+        the slot lies.
+
+        Args:
+            cumulative_freqs_list (List): the sorted list of cumulative frequencies
+                For example: freqs_list = [2,7,3], cumulative_freqs_list [0,2,9]
+            slot (int): the value to search in the sorted list
+
+        Returns:
+            bin: the bin in which the slot lies
+        """
+        # NOTE: side="right" corresponds to search of type a[i-1] <= t < a[i]
+        bin = np.searchsorted(cumulative_freqs_list, slot, side="right") - 1
+        return int(bin)
     def rans_base_encode_step(self, s, state: int):
         """base rANS encode step
 
         updates the state based on the input symbols s, and returns the updated state
         """
         f = self.params.freqs.frequency(s)
-#         block_id = state // f
-#         slot = self.params.freqs.cumulative_freq_dict[s] + (state % f)
-#         next_state = block_id * self.params.M + slot
-#         return next_state
+        block_id = state // f
+        slot = self.params.freqs.cumulative_freq_dict[s] + (state % f)
+        next_state = block_id * self.params.M + slot
+        if slot not in self.lookup_table:
+            self.lookup_table[slot] = s
+        return next_state
         
 
     def shrink_state(self, state: int, next_symbol) -> Tuple[int, BitArray]:
@@ -232,7 +250,7 @@ class rANSEncoder(DataEncoder):
         # NOTE: we are prepending bits for pedagogy. In practice, it might be faster to assign a larger memory chunk and then fill it from the back
         # see: https://github.com/rygorous/ryg_rans/blob/c9d162d996fd600315af9ae8eb89d832576cb32d/main.cpp#L176 for example
         symbol_bitarray = out_bits + symbol_bitarray
-
+        symbol_ind = self.find_bin(cum_prob_list, slot)
         # core encoding step
         state = self.rans_base_encode_step(s, state)
         return state, symbol_bitarray
@@ -265,35 +283,19 @@ class rANSEncoder(DataEncoder):
 
 
 class rANSDecoder(DataDecoder):
-    def __init__(self, rans_params: rANSParams):
+    def __init__(self, rans_params: rANSParams,lookup_table):
         self.params = rans_params
-
-    @staticmethod
-    def find_bin(cumulative_freqs_list: List, slot: int) -> int:
-        """Performs binary search over cumulative_freqs_list to locate which bin
-        the slot lies.
-
-        Args:
-            cumulative_freqs_list (List): the sorted list of cumulative frequencies
-                For example: freqs_list = [2,7,3], cumulative_freqs_list [0,2,9]
-            slot (int): the value to search in the sorted list
-
-        Returns:
-            bin: the bin in which the slot lies
-        """
-        # NOTE: side="right" corresponds to search of type a[i-1] <= t < a[i]
-        bin = np.searchsorted(cumulative_freqs_list, slot, side="right") - 1
-        return int(bin)
+        self.lookup_table = lookup_table
 
     def rans_base_decode_step(self, state: int):
         block_id = state // self.params.M
         slot = state % self.params.M
 
         # decode symbol
-        cum_prob_list = list(self.params.freqs.cumulative_freq_dict.values())
-        symbol_ind = self.find_bin(cum_prob_list, slot)
-        s = self.params.freqs.alphabet[symbol_ind]
-
+        #cum_prob_list = list(self.params.freqs.cumulative_freq_dict.values())
+        #symbol_ind = self.find_bin(cum_prob_list, slot)
+        s = self.lookup_table[slot]
+        
         # retrieve prev state
         prev_state = (
             block_id * self.params.freqs.frequency(s)
@@ -443,7 +445,7 @@ def test_rANS_coding():
 
         # create encoder decoder
         encoder = rANSEncoder(rans_params)
-        decoder = rANSDecoder(rans_params)
+        decoder = rANSDecoder(rans_params,encoder.lookup_table)
 
         # test lossless coding
         is_lossless, encode_len, _ = try_lossless_compression(
