@@ -186,7 +186,7 @@ class rANSEncoder(DataEncoder):
         self.params = rans_params
         self.prob_dist = self.params.freqs.get_prob_dist()
         self.alias_sampler = VoseAliasSampler(self.prob_dist)
-        self.num_bits = alias_sampler.num_bits
+        self.num_bits = self.alias_sampler.num_bits
         self.lookup_table = {}
     @staticmethod
     def find_bin(cumulative_freqs_list: List, slot: int) -> int:
