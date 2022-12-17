@@ -58,7 +58,7 @@ https://github.com/kedartatwawadi/stanford_compression_library/wiki/Asymmetric-N
 2. https://github.com/kedartatwawadi/stanford_compression_library/wiki/Asymmetric-Numeral-Systems
 More references in the wiki article
 """
-
+import math
 from dataclasses import dataclass
 import numpy as np
 from typing import Tuple, Any, List
