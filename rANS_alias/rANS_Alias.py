@@ -184,7 +184,7 @@ class rANSEncoder(DataEncoder):
             rans_params (rANSParams): global rANS hyperparameters
         """
         self.params = rans_params
-        self.prob_dist = self.params.freq.get_prob_dist()
+        self.prob_dist = self.params.freqs.get_prob_dist()
         self.alias_sampler = VoseAliasSampler(self.prob_dist)
         self.num_bits = alias_sampler.num_bits
         self.lookup_table = {}
